@@ -40,6 +40,21 @@ class AclNodesTable extends Table
     {
         return Configure::read('Acl.database');
     }
+	
+	/**
+	 * Retrieves the Aro/Aco tree for this model
+	 *
+	 * @param array $options Array with find options
+	 * @param boolean $hydration enable hydration (default: false)
+	 * @return array|Query tree of Aro/Aco entities
+	 * @throws \Cake\Core\Exception\Exception when binding to a model that doesn't exist.
+	 */
+    public function tree($options = [], $hydration = false)
+	{
+		return $this->find('threaded', array_replace_recursive([
+					'order' => $this->getAlias() . '.lft ASC'
+				], $options))->enableHydration($hydration)->toArray();
+	}
 
     /**
      * Retrieves the Aro/Aco node for this model
